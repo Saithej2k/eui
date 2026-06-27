@@ -186,6 +186,11 @@ export type EuiSelectableProps<T = {}> = CommonProps &
      */
     errorMessage?: ReactElement | string | null;
     /**
+     * Marks the searchable input and options list as invalid for assistive technologies.
+     * Overrides `isInvalid` in `searchProps` and `listProps` when specified.
+     */
+    isInvalid?: boolean;
+    /**
      * Control whether or not options get filtered internally (i.e., whether filtering is
      * handled by EUI or by you, the consumer).
      * If set to `true`, all passed `options` will be displayed regardless of the user's
@@ -567,6 +572,7 @@ export class EuiSelectable<T = {}> extends Component<
       noMatchesMessage,
       emptyMessage,
       errorMessage,
+      isInvalid,
       selectableScreenReaderText,
       isPreFiltered,
       optionMatcher,
@@ -594,6 +600,7 @@ export class EuiSelectable<T = {}> extends Component<
     const {
       'aria-label': listAriaLabel,
       'aria-describedby': listAriaDescribedby,
+      isInvalid: listIsInvalid,
       isVirtualized,
       rowHeight,
       ...cleanedListProps
@@ -772,6 +779,7 @@ export class EuiSelectable<T = {}> extends Component<
                 ? searchAccessibleName
                 : { 'aria-label': placeholderName })}
               {...cleanedSearchProps}
+              {...(isInvalid == null ? {} : { isInvalid })}
             />
 
             <EuiScreenReaderOnly>
@@ -854,6 +862,7 @@ export class EuiSelectable<T = {}> extends Component<
                 {...(listHasAccessibleName
                   ? listAccessibleName
                   : searchable && { 'aria-label': placeholderName })}
+                isInvalid={isInvalid ?? listIsInvalid}
                 {...cleanedListProps}
                 {...virtualizedProps}
               />

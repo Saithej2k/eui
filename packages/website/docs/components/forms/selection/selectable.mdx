@@ -154,6 +154,47 @@ export default () => {
 };
 ```
 
+## Invalid state
+
+Set `isInvalid` to mark both the search field and options list as invalid for assistive technologies. Pair the invalid state with an error message that explains how to correct the selection.
+
+```tsx interactive
+import React, { useState } from 'react';
+import { EuiFormRow, EuiSelectable, EuiSelectableOption } from '@elastic/eui';
+
+export default () => {
+  const [options, setOptions] = useState<EuiSelectableOption[]>([
+    { label: 'Titan' },
+    { label: 'Enceladus' },
+    { label: 'Mimas' },
+  ]);
+  const isInvalid = !options.some(({ checked }) => checked === 'on');
+
+  return (
+    <EuiFormRow
+      label="Moons"
+      isInvalid={isInvalid}
+      error={isInvalid ? 'Select at least one moon' : undefined}
+    >
+      <EuiSelectable
+        aria-label="Moons"
+        searchable
+        isInvalid={isInvalid}
+        options={options}
+        onChange={setOptions}
+      >
+        {(list, search) => (
+          <>
+            {search}
+            {list}
+          </>
+        )}
+      </EuiSelectable>
+    </EuiFormRow>
+  );
+};
+```
+
 ## Single selection
 
 Selection can be restricted to a single option at a time with the `singleSelection` prop. Passing `true` allows for 0 or 1 option to be selected, while `"always"` requires 1 option to be selected at all times. The default value is `false`.
